@@ -33,31 +33,46 @@ const calcularGastos = () => {
 };
 
 
+//Cálculo cuota
 
   const tipoInteres = state.interes/12
   const numerador = state.prestamo * Math.pow(1+tipoInteres/100, state.plazo*12) * (tipoInteres/100)
   const denominador = Math.pow(1+tipoInteres/100, state.plazo*12) - 1
-  const cuota = Math.round(numerador / denominador)
+  const cuota = (numerador / denominador).toFixed(2)
+
+
+ //Cálculo total intereses
+
+
+ // interés = capital pte * interés/100 / cuotas año
 
   let interesAcumulado = 0
   let amortizadoAcumulado = 0
   let capitalPendiente = state.prestamo
   
 
-  
+  for (let i=0; i< (state.plazo*12); i++) {
     if(interesAcumulado === 0) {
-      interesAcumulado = (state.prestamo * (state.interes/100))/12
-      amortizadoAcumulado = cuota-interesAcumulado
-      capitalPendiente - amortizadoAcumulado
+      interesAcumulado = ((state.prestamo * (state.interes/100))/12).toFixed(2)
+      amortizadoAcumulado = (cuota-interesAcumulado).toFixed(2)
+      capitalPendiente -= amortizadoAcumulado
     } else {
-      for (let i=0; i<(state.plazo*12)-1; i++) {
-        const interes = (capitalPendiente * (state.interes/100))/12
-        amortizadoAcumulado += cuota-interes
-        return interesAcumulado + interes
+      
+        const interes = ((capitalPendiente * (state.interes/100))/12).toFixed(2)
+        interesAcumulado = (interesAcumulado+interes)
+        const capitalAmortizado = cuota-interes
+        amortizadoAcumulado += capitalAmortizado
+        capitalPendiente -= capitalAmortizado
         
-      }
+      
     } 
-    
+    // console.log(capitalPendiente)
+  } 
+
+
+    console.log(interesAcumulado )
+    // console.log("el capital amortizado es" + amortizadoAcumulado )
+    // console.log("el capital pendiente es" + capitalPendiente)
 
 
 
@@ -118,7 +133,7 @@ const calcularGastos = () => {
       </div>  
       <div>
         <h4>Intereses</h4>
-        <h5>{interesAmortizacion}€</h5>
+        <h5>{}€</h5>
       </div>
     </>
   )
