@@ -23,15 +23,18 @@ const handleChange = (e) => {
   }))
 }
 
-const calcularGastos = () => {
+// const calcularGastos = () => {
 
-  const nuevosGastos = state.precio * 0.12;
-  setState((prevState) => ({
-    ...prevState,
-    gastos: nuevosGastos
-  }));
-};
+//   const nuevosGastos = state.precio * 0.12;
+//   setState((prevState) => ({
+//     ...prevState,
+//     gastos: nuevosGastos,
+//     prestamo: state.precio*0.2
+//   }));
+// };
 
+  const porcPrestamo = (state.prestamo/state.precio)*100
+  const gastos = state.precio * 0.12
 
 //Cálculo cuota
 
@@ -52,29 +55,28 @@ const calcularGastos = () => {
   
 
   for (let i=0; i< (state.plazo*12); i++) {
-    if(interesAcumulado === 0) {
-      interesAcumulado = ((state.prestamo * (state.interes/100))/12).toFixed(2)
-      amortizadoAcumulado = (cuota-interesAcumulado).toFixed(2)
-      capitalPendiente -= amortizadoAcumulado
-    } else {
+ 
       
-        const interes = ((capitalPendiente * (state.interes/100))/12).toFixed(2)
-        interesAcumulado = (interesAcumulado+interes)
-        const capitalAmortizado = cuota-interes
-        amortizadoAcumulado += capitalAmortizado
-        capitalPendiente -= capitalAmortizado
-        
-      
-    } 
-    // console.log(capitalPendiente)
+        const interes = ((capitalPendiente * (state.interes/100))/12)
+        const cuotaActual = parseFloat(cuota);
+        const capitalAmortizado = cuotaActual-interes
+
+      interesAcumulado += interes
+      amortizadoAcumulado += capitalAmortizado
+      capitalPendiente -= capitalAmortizado
+
   } 
 
 
-    console.log(interesAcumulado )
-    // console.log("el capital amortizado es" + amortizadoAcumulado )
-    // console.log("el capital pendiente es" + capitalPendiente)
+  interesAcumulado = interesAcumulado.toFixed(2)
+  const interesNumero = parseInt(interesAcumulado)
+  amortizadoAcumulado = amortizadoAcumulado.toFixed(2)
+
+  console.log(amortizadoAcumulado)
 
 
+
+  const totalCosteHipoteca = state.precio + interesNumero + gastos
 
   return (
     <>
@@ -99,6 +101,7 @@ const calcularGastos = () => {
             value={state.prestamo}
             onChange={handleChange}
           />
+          <div>{porcPrestamo}%</div>
         </div>
 
         <div>
@@ -121,19 +124,27 @@ const calcularGastos = () => {
           />
         </div>
 
-        <button type="button" onClick={calcularGastos}>Calcular</button>
+        {/* <button type="button" onClick={calcularGastos}>Calcular</button> */}
     </form> 
-      <div>
+      {/* <div>
         <h4>Gastos compraventa</h4>
         <h5>{state.gastos}€</h5>
-      </div>
+      </div> */}
       <div>
         <h4>Cuota</h4>
         <h5>{cuota}€</h5>
       </div>  
       <div>
         <h4>Intereses</h4>
-        <h5>{}€</h5>
+        <h5>{interesAcumulado}€</h5>
+      </div>
+      <div>
+        <h4>Gastos Aprox</h4>
+        <h5>{gastos}€</h5>
+      </div>  
+      <div>
+        <h4>Coste total con hipoteca</h4>
+        <h5>{totalCosteHipoteca}€</h5>
       </div>
     </>
   )
