@@ -33,8 +33,9 @@ const handleChange = (e) => {
 //   }));
 // };
 
-  const porcPrestamo = (state.prestamo/state.precio)*100
+  const porcPrestamo = ((state.prestamo/state.precio)*100).toFixed(1)
   const gastos = state.precio * 0.12
+  const costeTotal = state.precio + gastos
 
 //Cálculo cuota
 
@@ -81,71 +82,105 @@ const handleChange = (e) => {
   return (
     <>
       <h1>Prueba simulador</h1>
+      <div className='simulador'>
+        <div className='resultados'>
+          <form className='formulario'>
+            <div className='introDato'>
+              <label>Precio del inmueble</label>
+              <input 
+              type='number' 
+              name='precio' 
+              value={state.precio}
+              onChange={handleChange}  
+              />
+            </div>
 
-     <form >
-        <div>
-          <label>Precio del inmueble</label>
-          <input 
-            type='number' 
-            name='precio' 
-            value={state.precio}
-            onChange={handleChange}  
-          />
+            <div className='introDato'>
+              <label>Importe hipoteca</label>
+              <div className='porPrestamo'>
+              <input 
+                type='number' 
+                name='prestamo'
+                value={state.prestamo}
+                onChange={handleChange}
+              />
+              <div className='porcentaje'>{porcPrestamo}%</div>
+              </div>
+              
+            </div>
+
+            <div className='introDato'>
+              <label>Plazo en años</label>
+              <input 
+                type='number' 
+                name='plazo'
+                value={state.plazo}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className='introDato'>
+              <label>Tipo de interés</label>
+              <input 
+                type='number' 
+                name='interes'
+                value={state.interes}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* <button type="button" onClick={calcularGastos}>Calcular</button> */}
+          </form> 
         </div>
+          
+        <div className='resultados'>
+          {/* <div>
+          <h4>Gastos compraventa</h4>
+          <h5>{state.gastos}€</h5>
+          </div> */}
+          <div>
+            <h4>Cuota mensual</h4>
+            <h5>{cuota}€</h5>
+          </div>  
+          <div className='tiposCostes'>
+            
+              <div>
+                <h4>Precio del inmueble</h4>
+                <h5>{state.precio}€</h5>
+              <div>
+                <h4>Gastos Aproximados</h4>
+                <h5>{gastos}€ (12%)</h5>
+              </div>
+              <div>
+                <h4>Coste total inmueble</h4>
+                <h5>{costeTotal}€</h5>
+              </div>
+            </div>  
 
-        <div>
-          <label>Importe hipoteca</label>
-          <input 
-            type='number' 
-            name='prestamo'
-            value={state.prestamo}
-            onChange={handleChange}
-          />
-          <div>{porcPrestamo}%</div>
+            <div>
+
+              <div>
+                <h4>Importe hipoteca</h4>
+                <h5>{state.prestamo}€</h5>
+              </div>
+              <div>
+                <h4>Intereses hipoteca</h4>
+                <h5>{interesAcumulado}€</h5>
+              </div>
+              
+              <div>
+                <h4>Coste total inmueble con hipoteca</h4>
+                <h5>{totalCosteHipoteca}€</h5>
+              </div>
+            </div>  
+          
+            
+            
+          </div>
         </div>
-
-        <div>
-          <label>Plazo en años</label>
-          <input 
-            type='number' 
-            name='plazo'
-            value={state.plazo}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label>Tipo de interés</label>
-          <input 
-            type='number' 
-            name='interes'
-            value={state.interes}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* <button type="button" onClick={calcularGastos}>Calcular</button> */}
-    </form> 
-      {/* <div>
-        <h4>Gastos compraventa</h4>
-        <h5>{state.gastos}€</h5>
-      </div> */}
-      <div>
-        <h4>Cuota</h4>
-        <h5>{cuota}€</h5>
-      </div>  
-      <div>
-        <h4>Intereses</h4>
-        <h5>{interesAcumulado}€</h5>
       </div>
-      <div>
-        <h4>Gastos Aprox</h4>
-        <h5>{gastos}€</h5>
-      </div>  
-      <div>
-        <h4>Coste total con hipoteca</h4>
-        <h5>{totalCosteHipoteca}€</h5>
-      </div>
+      
+      
     </>
   )
 }
